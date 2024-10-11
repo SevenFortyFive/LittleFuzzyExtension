@@ -2,6 +2,7 @@ import { StreamRequest } from '../common/types'
 import { logStreamOptions, safeParseJsonResponse } from './utils'
 
 export async function streamResponse(request: StreamRequest) {
+  console.log(request)
   logStreamOptions(request)
   const { body, options, onData, onEnd, onError, onStart } = request
   const controller = new AbortController()

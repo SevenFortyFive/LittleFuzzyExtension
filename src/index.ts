@@ -11,6 +11,10 @@ import * as os from 'os'
 import * as fs from 'fs'
 import * as vscode from 'vscode'
 
+//====================
+import { streamFromSpark } from './fuzzy_test/test_spark'
+//===================
+
 import { CompletionProvider } from './extension/providers/completion'
 import { SidebarProvider } from './extension/providers/sidebar'
 import { SessionManager } from './extension/session-manager'
@@ -26,7 +30,8 @@ import {
   EXTENSION_NAME,
   EVENT_NAME,
   WEBUI_TABS,
-  TWINNY_COMMAND_NAME
+  TWINNY_COMMAND_NAME,
+  FUZZY_COMMAND_NAME
 } from './common/constants'
 import { TemplateProvider } from './extension/template-provider'
 import { ServerMessage } from './common/types'
@@ -82,6 +87,16 @@ export async function activate(context: ExtensionContext) {
       { pattern: '**' },
       completionProvider
     ),
+    // ===============================================================
+    commands.registerCommand(FUZZY_COMMAND_NAME.testConsole, () => {
+      console.log('hello world from fuzzy')
+    })
+    ,
+    commands.registerCommand(FUZZY_COMMAND_NAME.testSpark, () => {
+        streamFromSpark()
+    })
+    // ===============================================================
+    ,
     commands.registerCommand(TWINNY_COMMAND_NAME.enable, () => {
       statusBarItem.show()
     }),

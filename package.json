@@ -136,6 +136,16 @@
     },
     "commands": [
       {
+        "command": "fuzzy.consolePrint",
+        "title": "Fuzzy - test console print"
+      }
+      ,
+      {
+        "command": "fuzzy.testSpark",
+        "title": "Fuzzy - test spark model"
+      }
+      ,
+      {
         "command": "twinny.openPanelChat",
         "title": "Twinny - Open full screen panel"
       },

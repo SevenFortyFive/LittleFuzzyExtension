@@ -109,6 +109,11 @@ export const TWINNY_COMMAND_NAME = {
   twinnySymmetryTab: 'twinny.symmetry'
 }
 
+export const FUZZY_COMMAND_NAME = {
+  testConsole: 'fuzzy.consolePrint',
+  testSpark: 'fuzzy.testSpark'
+}
+
 export const CONVERSATION_EVENT_NAME = {
   clearAllConversations: 'twinny.clear-all-conversations',
   getActiveConversation: 'twinny.get-active-conversation',
