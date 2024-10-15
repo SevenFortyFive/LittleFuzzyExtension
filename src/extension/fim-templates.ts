@@ -20,6 +20,7 @@ const getFileContext = (
   language: string | undefined,
   header: string
 ) => {
+  // 获取文件信息，包括语言类型，注释前缀后缀等
   const languageId =
     supportedLanguages[language as keyof typeof supportedLanguages]
   const fileContext = fileContextEnabled

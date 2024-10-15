@@ -558,7 +558,6 @@ export class CompletionProvider implements InlineCompletionItemProvider {
     if (this._provider.fimTemplate === FIM_TEMPLATE_FORMAT.custom) {
       const systemMessage =
         await this._templateProvider.readSystemMessageTemplate('fim-system.hbs')
-
       const fimTemplate =
         await this._templateProvider.readTemplate<FimTemplateData>('fim', {
           prefix: prefixSuffix.prefix,

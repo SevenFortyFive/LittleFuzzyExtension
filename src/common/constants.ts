@@ -111,7 +111,8 @@ export const TWINNY_COMMAND_NAME = {
 
 export const FUZZY_COMMAND_NAME = {
   testConsole: 'fuzzy.consolePrint',
-  testSpark: 'fuzzy.testSpark'
+  testSpark: 'fuzzy.testSpark',
+  makeProject: 'fuzzy.makeProject'
 }
 
 export const CONVERSATION_EVENT_NAME = {

@@ -3,6 +3,17 @@ import { CodeLanguageDetails } from './languages'
 import { ALL_BRACKETS } from './constants'
 import { serverMessageKeys } from 'symmetry-core'
 
+//===============================
+export interface SparkRequestBodyBase{
+  stream: boolean,
+}
+
+export interface FuzzyProjectTarget{
+  path: string,
+  description: string
+}
+//==============================
+
 export interface RequestBodyBase {
   stream: boolean
   n_predict?: number
@@ -184,7 +195,9 @@ export const apiProviders = {
   LMStudio: 'lmstudio',
   Ollama: 'ollama',
   Oobabooga: 'oobabooga',
-  OpenWebUI: 'openwebui'
+  OpenWebUI: 'openwebui',
+  // ========================
+  Spark: 'spark'
 } as const
 
 export interface ApiModel {

@@ -38,6 +38,7 @@ import { ServerMessage } from './common/types'
 import { FileInteractionCache } from './extension/file-interaction'
 import { getLineBreakCount } from './webview/utils'
 import { FullScreenProvider } from './extension/providers/panel'
+import { FuzzyProvider } from './extension/providers/fuzzy'
 
 export async function activate(context: ExtensionContext) {
   setContext(context)
@@ -80,6 +81,8 @@ export async function activate(context: ExtensionContext) {
     context
   )
 
+  const fuzzyProvider = new FuzzyProvider()
+
   templateProvider.init()
 
   context.subscriptions.push(
@@ -88,12 +91,41 @@ export async function activate(context: ExtensionContext) {
       completionProvider
     ),
     // ===============================================================
+    // ²âÊÔÊä³öÃüÁî
     commands.registerCommand(FUZZY_COMMAND_NAME.testConsole, () => {
       console.log('hello world from fuzzy')
     })
     ,
+    // ²âÊÔÐÇ»ðÄ£ÐÍÃüÁî
     commands.registerCommand(FUZZY_COMMAND_NAME.testSpark, () => {
         streamFromSpark()
+    }),
+    // ´´½¨ÏîÄ¿ÃüÁî
+    commands.registerCommand(FUZZY_COMMAND_NAME.makeProject,async () => {
+      try {
+        // const filePath = await vscode.window.showInputBox({
+        //   prompt: 'file path',
+        //   placeHolder: '/path/to/project',
+        //   validateInput: (input) => input.trim() === '' ? 'the path should not be empty' : null
+        // });
+        // if (!filePath) {
+        //   return;
+        // }
+        // const fileDescription = await vscode.window.showInputBox({
+        //   prompt: 'input description of the project',
+        //   placeHolder: 'make a game with python',
+        //   validateInput: (input) => input.trim() === '' ? 'description should not be empty' : null
+        // });
+        // if (!fileDescription) {
+        //   return;
+        // }
+        // vscode.window.showInformationMessage(`already make a project to - ${filePath}, for - ${fileDescription}`);
+
+        // fuzzyProvider.makeProject({path: filePath, description: fileDescription})
+        fuzzyProvider.makeProject({path: 'path', description: 'make a small game with python'})
+      } catch (err) {
+        vscode.window.showErrorMessage(`an error happen when creating the project -${err}`);
+      }
     })
     // ===============================================================
     ,

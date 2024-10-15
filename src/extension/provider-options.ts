@@ -19,6 +19,7 @@ export function createStreamRequestBody(
   }
 ): RequestBodyBase | RequestOptionsOllama | StreamBodyOpenAI {
   switch (provider) {
+    case apiProviders.Spark:
     case apiProviders.Ollama:
     case apiProviders.OpenWebUI:
       return {

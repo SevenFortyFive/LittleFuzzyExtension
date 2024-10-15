@@ -136,6 +136,10 @@
     },
     "commands": [
       {
+        "command": "fuzzy.makeProject",
+        "title": "Fuzzy - make a Project"
+      },
+      {
         "command": "fuzzy.consolePrint",
         "title": "Fuzzy - test console print"
       }

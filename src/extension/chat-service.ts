@@ -334,6 +334,7 @@ export class ChatService {
     return { requestOptions, requestBody }
   }
 
+  // 文本生成回调函数
   private onStreamData = (
     streamResponse: StreamResponse,
     onEnd?: (completion: string) => void
@@ -342,13 +343,14 @@ export class ChatService {
     if (!provider) return
 
     try {
+      // 通过provider获取回复信息
       const data = getChatDataFromProvider(provider.provider, streamResponse)
       this._completion = this._completion + data
       if (onEnd) return
       this._webView?.postMessage({
         type: EVENT_NAME.twinnyOnCompletion,
         value: {
-          completion: this._completion.trimStart(),
+          completion: this._completion.trimStart(),  // 将回复信息通过postmessage传输给webview
           data: getLanguage(),
           type: this._promptTemplate
         }
@@ -632,7 +634,7 @@ export class ChatService {
         content: cleanedText
       })
     }
-    updateLoadingMessage(this._webView, 'Thinking')
+    updateLoadingMessage(this._webView, '正在思考')
     const request = this.buildStreamRequest(conversation)
     if (!request) return
     const { requestBody, requestOptions } = request
