@@ -634,7 +634,7 @@ export class ChatService {
         content: cleanedText
       })
     }
-    updateLoadingMessage(this._webView, 'ÕýÔÚË¼¿¼')
+    updateLoadingMessage(this._webView, 'thinking...')
     const request = this.buildStreamRequest(conversation)
     if (!request) return
     const { requestBody, requestOptions } = request

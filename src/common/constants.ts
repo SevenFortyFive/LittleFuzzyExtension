@@ -110,9 +110,12 @@ export const TWINNY_COMMAND_NAME = {
 }
 
 export const FUZZY_COMMAND_NAME = {
+  showErrorMessage: 'fuzzy.showErrorMessage',
+  openProject: 'fuzzy.openProject',
   testConsole: 'fuzzy.consolePrint',
   testSpark: 'fuzzy.testSpark',
-  makeProject: 'fuzzy.makeProject'
+  createProject: 'fuzzy.createProject',
+  testCreateProject: 'fuzzy.testCreateProject'
 }
 
 export const CONVERSATION_EVENT_NAME = {

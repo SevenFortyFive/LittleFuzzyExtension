@@ -34,11 +34,14 @@ import {
   FUZZY_COMMAND_NAME
 } from './common/constants'
 import { TemplateProvider } from './extension/template-provider'
-import { ServerMessage } from './common/types'
+import { ProjectData, ServerMessage, TemplateData } from './common/types'
 import { FileInteractionCache } from './extension/file-interaction'
 import { getLineBreakCount } from './webview/utils'
 import { FullScreenProvider } from './extension/providers/panel'
-import { FuzzyProvider } from './extension/providers/fuzzy'
+import { FuzzyProvider } from './extension/create-project'
+import { generateProjectWithOllama } from './fuzzy_test/test_create_project'
+import { error } from 'console'
+import { WriteOptions } from '@lancedb/lancedb'
 
 export async function activate(context: ExtensionContext) {
   setContext(context)
@@ -81,7 +84,11 @@ export async function activate(context: ExtensionContext) {
     context
   )
 
-  const fuzzyProvider = new FuzzyProvider()
+  // ³õÊ¼»¯Ð¡ÃÔºýprovider
+  const fuzzyProvider = new FuzzyProvider(
+    templateDir,
+    context
+  )
 
   templateProvider.init()
 
@@ -91,9 +98,23 @@ export async function activate(context: ExtensionContext) {
       completionProvider
     ),
     // ===============================================================
+    commands.registerCommand(FUZZY_COMMAND_NAME.showErrorMessage, async(errorMessage)=>{
+      if(typeof errorMessage !== 'string') return
+      vscode.window.showErrorMessage(errorMessage)
+    }),
+    commands.registerCommand(FUZZY_COMMAND_NAME.openProject, async(path)=>{
+        if(typeof path !== 'string') return
+        const uri = vscode.Uri.file(path)
+        try {
+          await vscode.commands.executeCommand('vscode.openFolder', uri, { forceNewWindow: true });
+        } catch (error: unknown) {
+          vscode.window.showErrorMessage('Failed to open folder');
+      }
+    }),
     // ²âÊÔÊä³öÃüÁî
-    commands.registerCommand(FUZZY_COMMAND_NAME.testConsole, () => {
-      console.log('hello world from fuzzy')
+    commands.registerCommand(FUZZY_COMMAND_NAME.testConsole, async () => {
+      const template = templateProvider.readTemplate<ProjectData>('create_project',{description: 'make a game with python'})
+      console.log(template)
     })
     ,
     // ²âÊÔÐÇ»ðÄ£ÐÍÃüÁî
@@ -101,34 +122,52 @@ export async function activate(context: ExtensionContext) {
         streamFromSpark()
     }),
     // ´´½¨ÏîÄ¿ÃüÁî
-    commands.registerCommand(FUZZY_COMMAND_NAME.makeProject,async () => {
+    commands.registerCommand(FUZZY_COMMAND_NAME.createProject,async () => {
       try {
-        // const filePath = await vscode.window.showInputBox({
-        //   prompt: 'file path',
-        //   placeHolder: '/path/to/project',
-        //   validateInput: (input) => input.trim() === '' ? 'the path should not be empty' : null
-        // });
-        // if (!filePath) {
-        //   return;
-        // }
-        // const fileDescription = await vscode.window.showInputBox({
-        //   prompt: 'input description of the project',
-        //   placeHolder: 'make a game with python',
-        //   validateInput: (input) => input.trim() === '' ? 'description should not be empty' : null
-        // });
-        // if (!fileDescription) {
-        //   return;
-        // }
-        // vscode.window.showInformationMessage(`already make a project to - ${filePath}, for - ${fileDescription}`);
+        const desktopPath = path.join(os.homedir(), 'Desktop');
 
-        // fuzzyProvider.makeProject({path: filePath, description: fileDescription})
-        fuzzyProvider.makeProject({path: 'path', description: 'make a small game with python'})
+        const options = [
+          {label: 'desktop', description: desktopPath},
+          {label: 'others', description: 'f**k the desktop'}
+        ]
+
+        const selectedOption = await vscode.window.showQuickPick(options,{
+          placeHolder: 'select the root path'
+        })
+
+        if(!selectedOption) return
+
+        let filePath;
+
+        if(selectedOption.label === 'desktop'){
+          filePath = desktopPath
+        }else{
+          filePath = await vscode.window.showInputBox({
+            prompt: 'file path',
+            placeHolder: path.join(desktopPath, 'your_project_folder'),
+            validateInput: (input) => input.trim() === '' ? 'the path should not be empty' : null
+          });
+        }
+        if (!filePath) {
+          return;
+        }
+        const fileDescription = await vscode.window.showInputBox({
+          prompt: 'input description of the project',
+          placeHolder: 'make a game with python',
+          validateInput: (input) => input.trim() === '' ? 'description should not be empty' : null
+        });
+        if (!fileDescription) {
+          return;
+        }
+        fuzzyProvider.onCreateProjectWithOllama({path: filePath, description: fileDescription})
       } catch (err) {
-        vscode.window.showErrorMessage(`an error happen when creating the project -${err}`);
+        vscode.commands.executeCommand(FUZZY_COMMAND_NAME.showErrorMessage,`an error happen when creating the project -${err}`)
       }
-    })
+    }),
+    commands.registerCommand(FUZZY_COMMAND_NAME.testCreateProject,async ()=>{
+        generateProjectWithOllama()
+    }),
     // ===============================================================
-    ,
     commands.registerCommand(TWINNY_COMMAND_NAME.enable, () => {
       statusBarItem.show()
     }),

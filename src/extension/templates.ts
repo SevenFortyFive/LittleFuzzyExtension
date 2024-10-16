@@ -1,3 +1,5 @@
+import { template } from 'handlebars';
+
 export const defaultTemplates = [
   {
     name: 'explain',
@@ -123,5 +125,29 @@ Present it in markdown format, and refrain from mentioning:
   {
     name: 'fim-system',
     template: ''
+  },
+  //======================================
+  // 项目生成模板
+  {
+    name: 'create_project',
+    template:`
+Please generate a project based on the following description: {{{description}}}
+Return the project structure in the following JSON format:
+<PROJECT>
+{
+  "project_name": "Name",
+  "description": "Brief description of the project",
+  "files": [
+    {
+      "path": "src/index.html",
+      "content": "code in this file"
+    },
+    {
+      "path": "src/styles.css",
+      "content": "code in this file"
+    }
+  ]
+}
+</PROJECT>`.trim()
   }
 ]

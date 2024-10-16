@@ -9,8 +9,21 @@ export interface SparkRequestBodyBase{
 }
 
 export interface FuzzyProjectTarget{
-  path: string,
-  description: string
+  path: string,  // 项目生成路径
+  description: string  // 项目描述
+}
+
+export interface ProjectData extends Record<string, string | undefined>{
+  description: string,  // 项目描述
+  systemMessage?: string
+}
+
+export interface BlockRequest{
+  body: RequestBodyBase  // 此字段中stream应该指定为false
+  options: StreamRequestOptions  // 包含模型模型调用信息，header等
+  onStart?: (controller: AbortController) => void  // 请求开始回调函数
+  onError?: (error: Error) => void
+  onComplete:(streamResponse: unknown) => void  // 返回完成回调函数
 }
 //==============================
 

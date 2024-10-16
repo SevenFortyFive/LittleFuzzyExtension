@@ -7,6 +7,63 @@ import {
   RequestOptionsOllama
 } from '../common/types'
 
+//===============================
+// 根据不同的模型返回不同body
+export function createBlockRequestBodyCreateProject(
+  provider: string,
+  prompt: string,
+  options: {
+    temperature: number
+    numPredictChat: number
+    model: string
+    messages?: Message[]
+    keepAlive?: string | number
+  }
+): RequestBodyBase | RequestOptionsOllama | StreamBodyOpenAI {
+  switch (provider) {
+    case apiProviders.Ollama:
+    case apiProviders.OpenWebUI:
+      return {
+        model: options.model,
+        prompt,
+        stream: false,
+        keep_alive: options.keepAlive === '-1'
+          ? -1
+          : options.keepAlive,
+        options: {
+          temperature: options.temperature
+        }
+      }
+    case apiProviders.LMStudio:
+      return {
+        model: options.model,
+        prompt,
+        stream: false,
+        temperature: options.temperature
+      }
+    case apiProviders.LlamaCpp:
+    case apiProviders.Oobabooga:
+      return {
+        prompt,
+        stream: false,
+        temperature: options.temperature
+      }
+    case apiProviders.LiteLLM:
+      return {
+        messages: [{ content: prompt, role: USER }],
+        model: options.model,
+        stream: false,
+        temperature: options.temperature
+      }
+    default:
+      return {
+        prompt,
+        stream: false,
+        temperature: options.temperature
+      }
+  }
+}
+//===============================
 export function createStreamRequestBody(
   provider: string,
   options: {

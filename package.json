@@ -136,8 +136,20 @@
     },
     "commands": [
       {
-        "command": "fuzzy.makeProject",
-        "title": "Fuzzy - make a Project"
+        "command": "fuzzy.showErrorMessage",
+        "title": "Fuzzy - show error message"
+      },
+      {
+        "command": "fuzzy.openProject",
+        "title": "Fuzzy - simple open a Project"
+      },
+      {
+        "command": "fuzzy.createProject",
+        "title": "Fuzzy - create a Project"
+      },
+      {
+        "command": "fuzzy.testCreateProject",
+        "title": "Fuzzy - test create a Project"
       },
       {
         "command": "fuzzy.consolePrint",

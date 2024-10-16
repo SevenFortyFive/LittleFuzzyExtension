@@ -1,5 +1,5 @@
 import { StreamRequest } from '../common/types'
-import { logStreamOptions, safeParseJsonResponse } from './utils'
+import { safeParseJsonResponse } from './utils'
 
 export async function streamResponse(request: StreamRequest) {
   // console.log(request.body)
