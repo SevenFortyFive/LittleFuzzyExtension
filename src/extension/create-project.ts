@@ -7,6 +7,7 @@ import {blockResponse} from './block'
 import { ACTIVE_FIM_PROVIDER_STORAGE_KEY, FUZZY_COMMAND_NAME } from '../common/constants'
 import path from 'path'
 import fs from 'fs'
+import { json } from 'stream/consumers'
 
 // 提供项目生成功能
 export class FuzzyProvider{
@@ -119,7 +120,10 @@ export class FuzzyProvider{
       let rootPath = this.target.path; // 根目录路径
 
       const typeData = data as { response: string };
-      const jsonString = typeData.response.match(/<PROJECT>(.*?)<\/PROJECT>/s)?.[1].trim();  //  提取json
+      let jsonString = typeData.response.match(/<PROJECT>(.*?)<\/PROJECT>/s)?.[1].trim();  //  提取json
+
+      jsonString = jsonString?.replace(/"""/g, '{{TRIPLE_QUOTES}}')
+
       if (!jsonString) throw new Error('Invalid project structure');
       console.log(jsonString)
       const projectData = JSON.parse(jsonString); // 解析 JSON
@@ -134,7 +138,7 @@ export class FuzzyProvider{
 
         fs.mkdirSync(dir, { recursive: true });
 
-        fs.writeFileSync(filePath, file.content);
+        fs.writeFileSync(filePath, file.content.replace(/{{TRIPLE_QUOTES}}/g, '"""'));
         console.log(`Created file: ${filePath}`);
       });
 
